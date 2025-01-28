@@ -8,26 +8,20 @@ api = Api(app)
 def verify_params(params, function_name):
     retval = None
 
-    if function_name == 'add':
+    if function_name == 'add' or function_name == "subtract" or function_name == "multiply":
         if 'x' not in params or 'y' not in params:
             retval = 301
-        else:
-            retval = 200
-    elif function_name == 'subtract':
-        if 'x' not in params or 'y' not in params:
-            retval = 301
-        else:
-            retval = 200
-    elif function_name == 'multiply':
-        if 'x' not in params or 'y' not in params:
-            retval = 301
+        elif not isinstance(params['x'], (int, float)) or not isinstance(params['y'], (int, float)):
+            retval = 302
         else:
             retval = 200
     elif function_name == 'divide':
         if 'x' not in params or 'y' not in params:
             retval = 301
-        elif params['y'] == 0:
+        elif not isinstance(params['x'], (int, float)) or not isinstance(params['y'], (int, float)):
             retval = 302
+        elif params['y'] == 0:
+            retval = 303
         else:
             retval = 200
 
@@ -117,10 +111,10 @@ class Divide(Resource):
 
             retmap["quotient"] = quotient
 
-        elif status_code == 301:
+        elif status_code == 301 or status_code == 302:
             retmap["Message"] = "An error occurred. Please check your input."
         
-        elif status_code == 302:
+        elif status_code == 303:
             retmap["Message"] = "An error occurred. Division by zero is not allowed."
 
         return jsonify(retmap)
