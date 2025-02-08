@@ -27,6 +27,13 @@ def verify_params(params, function_name):
 
     return retval
 
+class HelloWorld(Resource):
+    def get(self):
+        return jsonify({
+            "status": 200,
+            "message": "Hello World!"
+        })
+
 
 class Add(Resource):
     def post(self):
@@ -119,7 +126,7 @@ class Divide(Resource):
 
         return jsonify(retmap)
 
-    
+api.add_resource(HelloWorld, "/")
 api.add_resource(Add, "/add")
 api.add_resource(Subtract, "/subtract")
 api.add_resource(Multiply, "/multiply")
